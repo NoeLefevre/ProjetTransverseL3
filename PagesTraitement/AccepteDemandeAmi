@@ -1,0 +1,31 @@
+<?php
+// On démarre la session AVANT d'écrire du code HTML
+session_start();
+try
+            {
+                $bdd = new PDO('mysql:host=35.240.56.92;dbname=projetevenement; charset=utf8;port=3306', 'root', 'fbq6dwab');
+            }
+            catch(Exception $e)
+            {
+    
+                    die('Erreur : '.$e->getMessage());
+            }
+    if ($_GET['action']=='valide')
+    {
+        $reponse = $bdd->prepare('UPDATE ami SET Accepte =\'oui\' WHERE IdRelation=? '); 
+        $reponse->execute(array($_GET['id']));
+        $reponse = $bdd->prepare('DELETE FROM notifications WHERE IdRelation=?'); 
+        $reponse->execute(array($_GET['id']));
+        header('Location: ../PagesPrincipales/Ami.php');
+        exit();
+    }
+    else if ($_GET['action']=='refuser')
+    {
+        $reponse = $bdd->prepare('DELETE FROM ami WHERE IdRelation=?'); 
+        $reponse->execute(array($_GET['id']));
+        $reponse = $bdd->prepare('DELETE FROM notifications WHERE IdRelation=?'); 
+        $reponse->execute(array($_GET['id']));
+        header('Location: ../PagesPrincipales/Ami.php');
+        exit();
+    }
+?>

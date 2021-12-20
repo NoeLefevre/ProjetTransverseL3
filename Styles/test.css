@@ -1,0 +1,45 @@
+body{
+    margin:0px;
+    }
+
+input[type="search"]{
+    width: 40%;
+    height : 50px;
+    font-size: large;
+    text-indent : 15px;
+}
+input[type="submit"]{
+    height : 50px;
+    background:url(http://www.larevuedekenza.fr/wp-content/themes/quarter/images/sidebar/loupe.png) no-repeat 0 0;
+    background-size: 44px;
+    width:55px;
+}
+input[type="submit"]:hover{
+    cursor : pointer;
+}
+
+
+.Searchbox{
+    padding : 15px 15px;
+    display :flex;
+    justify-content: center;
+}
+.input{
+    flex : auto;
+}
+.label{
+    flex : auto;
+    flex : 1 500px;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .wrapper input[type="text"] {
+    flex: 1 1 1;
+    width: 40%;
+    height : 50px;
+    font-size: large;
+    }

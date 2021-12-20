@@ -1,0 +1,33 @@
+body{
+    background-image:url("../Ressources/plan.jpg");
+    background-repeat:no-repeat;
+    background-size: cover;
+    -webkit-background-size: cover;
+}
+
+.block{
+    display :flex;
+    justify-content: space-between;
+    border: 2mm ridge rgba(3, 245, 184, 0.6);
+    width : 600px;
+    height: 90px;
+    background-color: rgb(255, 255, 255);
+    margin : 0 auto;
+    margin-top: 17vh;
+}
+
+.inscription{
+    text-indent : 17px;
+    margin-top : 15px;
+}
+
+.connexion{
+    margin-top : 15px;
+}
+
+.titre{
+    text-align : center;
+    font-size: 40px;
+    color:rgb(0, 110, 255);
+    font-family: cursive;
+}

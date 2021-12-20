@@ -1,0 +1,11 @@
+.wrapper{
+    display :flex;
+    flex-direction: column;
+    width: 400px;
+    align-content: center;
+}
+
+.wrapper > input{
+    align-content: center;
+    margin-top : 20px;
+}

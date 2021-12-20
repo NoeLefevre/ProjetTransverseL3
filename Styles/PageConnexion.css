@@ -1,0 +1,46 @@
+body{
+    background: fixed;
+    background-color: rgb(252, 252, 252);
+    background-repeat:no-repeat;
+
+
+
+}
+form
+{
+    text-align: center;
+    margin-top:5%;
+    border: 2mm solid rgba(4, 243, 243, 0.6);
+    width : 50%;
+    margin : 0 auto;
+    margin-top: 10vh;
+}
+
+.marge{
+    margin-top: 4%;
+}
+.marge2{
+    margin-top: 4%;
+}
+
+input[type="text"], input[type="password"], input[type="date"]
+{
+    border: 1px solid rgb(4, 243, 243);
+    width: 80%;
+    margin-top: 2%;
+}
+#t{
+    color : rgb(7, 7, 7);
+    font-size: 22px;
+}
+
+#inscription{
+    width : 440px;
+    height: 40px;
+}
+.titre{
+    text-align : center;
+    font-size: 40px;
+    color:rgb(6, 223, 223);
+    font-family: cursive;
+}

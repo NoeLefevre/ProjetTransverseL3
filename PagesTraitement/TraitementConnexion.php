@@ -23,8 +23,6 @@ session_start();
                 $reponse->execute(array($_POST['Email']));
                 
                 $donnee =$reponse->fetch();
-                $_SESSION['log'] = "oui";
-                $_SESSION['id'] = $donnee['IdPersonne'];
                 if (!$donnee)
                 {
                     echo "<script type='text/javascript'>document.location.replace('https://projetevenements.azurewebsites.net/PagesPrincipales/PageConnexion.php');</script>";

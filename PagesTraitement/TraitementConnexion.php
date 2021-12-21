@@ -10,38 +10,40 @@ session_start();
     </head>
     <body>
     <?php
-            try
-            {
-                $bdd = new PDO('mysql:host=35.240.56.92;dbname=projetevenement; charset=utf8;port=3306', 'root', 'fbq6dwab');
-            }
-            catch(Exception $e)
-            {
-    
-                    die('Erreur : '.$e->getMessage());
-            }
-            if (isset($_POST['MotDePasse']) && isset($_POST['Email']))
+        try {
+            $bdd = new PDO('mysql:host=projetevenement.mysql.database.azure.com;dbname=projetevenement', 'nono', 'Fbq6dwab678?!');
+        }
+        catch (PDOException $e) {
+            print("Error connecting to SQL Server.");
+            die(print_r($e));
+        }
+        if (isset($_POST['MotDePasse']) && isset($_POST['Email']))
             {
                 $reponse = $bdd->prepare('SELECT* FROM personne WHERE AdresseMail=?');
                 $reponse->execute(array($_POST['Email']));
                 $donnee =$reponse->fetch();
-                $_SESSION['id'] = $donnee['IdPersonne'];
-                $_SESSION['log'] = "oui";
+                
                 if (!$donnee)
                 {
-                    header('Location: PageConnexion.php');
+                    echo "<script type='text/javascript'>document.location.replace('https://projetevenements.azurewebsites.net/PagesPrincipales/PageConnexion.php');</script>";
                     exit();
                 }
                 else if (password_verify($_POST['MotDePasse'],$donnee['MotDePasse'])==True)
                 {
-                    header('Location: ../PagesPrincipales/PagePrincipale.php');
+                    $_SESSION['id'] = $donnee['IdPersonne'];
+                    $_SESSION['log'] = "oui";
+                    echo "<script type='text/javascript'>document.location.replace('https://projetevenements.azurewebsites.net/index.php');</script>";
                     exit();
                 }
                 else
                 {
-                    header('Location: ../PagesPrincipales/PageConnexion.php');
+                    echo "<script type='text/javascript'>document.location.replace('https://projetevenements.azurewebsites.net/PagesPrincipales/PageConnexion.php');</script>";
                     exit();
                 }
+                
+         
             }
+        
             ?>
        
             </body>

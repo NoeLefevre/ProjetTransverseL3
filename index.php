@@ -67,7 +67,7 @@ session_start();
                             <a title="Accueil" href="#">Message privé</a>
                         </li>
                         <li>
-                            <a title="Accueil" href="profil.php?id=<?php echo $_SESSION['id']?>">Modifier</a>
+                            <a title="Accueil" href="PagesPrincipales/profil.php?id=<?php echo $_SESSION['id']?>">Modifier</a>
                         </li>
                         <li>
                             <a title="Accueil" href="../PagesTraitement/TraitementDeconnexion.php#">Se Deconnecter</a>

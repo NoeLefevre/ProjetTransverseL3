@@ -6,14 +6,11 @@ session_start();
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href = "../Styles/AfficherEvenements.css"/>
+        <link rel="stylesheet" href = "../Styles/afficherGroupe.css"/>
         <meta charset="utf-8" />
     </head>
     <body>
-    <?php
-    if (isset($_SESSION['log']))
-        {
-            ?>
+<?php  $bdd = new PDO('mysql:host=35.240.56.92;dbname=projetevenement; charset=utf8;port=3306', 'root', 'fbq6dwab'); ?>
         <header>
             <div class="menu">
                 <img id="Hamburger" src = "../Ressources/Hamburger_icon.png">
@@ -23,7 +20,7 @@ session_start();
             <form class = "Searchbox " action = "../PagesPrincipales/AfficherRecherche.php" method = "GET">
                     <input id = "searchbar" type = "search" name = "terme" placeholder ="Rechercher">
                     <img id ="loupe" src = "../Ressources/loupe_icone.png">
-                </form>
+            </form>
             <div class="hautdroit">
                 <img id="notification" src = "../Ressources/notification_icone.png">
                 <img id="notification2" src = "../Ressources/notification_icone.png">
@@ -47,19 +44,12 @@ session_start();
                         <img id="evenements" src="../Ressources/evenements_icone.png">
                         <a href ="../PagesPrincipales/AfficherEvenements.php"><p class="liste">Vos Evenements</p>
                     </div>
-                    <div class="boutonevenement">
-                        <a href="../PagesPrincipales/PageCreationEvenement.php">Créer un evenement</a>
-                    </div>
-                    <div class="boutongroupe">
-                        <a href="../PagesPrincipales/PageCreationGroupe.php">Créer un groupe</a>
-                    </div>
 
                 </div>
             </nav>
             <div id="profil_dynamique">
                 <ul class="menu2">
                 <?php
-
                     if (!isset($_SESSION['log']))
                     {
                         ?>
@@ -91,11 +81,9 @@ session_start();
                     ?>
                 </ul>
             </div>
-            
             <div id="notification_dynamique">
                 <ul class="menu2">
                      <?php 
-                    
                      if (isset($_SESSION['log']))
                      {
                         $bdd = new PDO('mysql:host=35.240.56.92;dbname=projetevenement; charset=utf8;port=3306', 'root', 'fbq6dwab');
@@ -127,64 +115,50 @@ session_start();
                     }
 
                 ?>
-                
                 <ul class="menu2">
-        </div>
-        <div class="tout">
+            </div>
+        <div class="block">
             <?php
-            
-            try
-            {
-                $bdd = new PDO('mysql:host=35.240.56.92;dbname=projetevenement; charset=utf8;port=3306', 'root', 'fbq6dwab');
-            }
-            catch(Exception $e)
-            {
-                die('Erreur : '.$e->getMessage());
-            }
-            $req = $bdd->prepare('SELECT images.LienImage as im, evenement.information as info, evenement.NomEvenement as nom, evenement.IdEvenement as id  FROM images JOIN evenement ON images.IdEvenement=evenement.IdEvenement JOIN appartenance ON appartenance.IdAppartenance=evenement.IdAppartenance WHERE appartenance.IdPersonne=:idpersonne UNION ALL SELECT images.LienImage as im, evenement.information as info, evenement.NomEvenement as nom, evenement.IdEvenement as id  FROM images JOIN evenement ON images.IdEvenement=evenement.IdEvenement JOIN appartenance ON appartenance.IdAppartenance=evenement.IdAppartenance JOIN groupe ON appartenance.IdGroupe=groupe.IdGroupe WHERE groupe.Leader=:idpersonne ');
-            $req->execute(array('idpersonne' => $_SESSION['id'],
+        $req = $bdd->prepare('SELECT imagegroupe.LienImage as im, personne.nom as nom, personne.prenom as prenom , groupe.nom as nomgrp,groupe.Leader as leader, groupe.IdGroupe as id FROM imagegroupe JOIN groupe ON imagegroupe.IdGroupe=groupe.IdGroupe JOIN personne ON personne.IdPersonne=groupe.Leader WHERE groupe.IdGroupe=:idgroupe');
+        $req->execute(array('idgroupe' => $_GET['id'],
+                                        ));
+        $contenu = $req->fetch();
+        ?>
+        
+        <div class="Affichage">
+                                        
+            <img src="<?php echo $contenu['im'];?>">
+            <?php
+            echo $contenu['nom'];
+            echo $contenu['prenom'];
+            echo $contenu['nomgrp'];       
+        $req2 = $bdd->prepare('SELECT * FROM appartient WHERE IdPersonne=:idpersonne AND IdGroupe=:idgroupe');
+        $req2->execute(array('idpersonne' => $_SESSION['id'],
+                             'idgroupe' => $_GET['id'],
                                             ));
-            $req2 = $bdd->prepare('SELECT images.LienImage as im, evenement.information as info, evenement.NomEvenement as nom, evenement.IdEvenement as id  FROM images JOIN evenement ON images.IdEvenement=evenement.IdEvenement JOIN appartientevenement ON appartientevenement.IdEvenement=evenement.IdEvenement WHERE appartientevenement.IdPersonne=:idpersonne ');
-            $req2->execute(array('idpersonne' => $_SESSION['id'],
-                                                                            ));
+        $contenu2 = $req2->fetch();                      
+        if ($contenu['leader']==$_SESSION['id'] || isset($contenu2['IdPersonne']))
+        {?>
+        <div class="Participer">
+            <?php
+            echo "Vous participez deja à ce groupe";
             ?>
-            <h2 class="Evenement"> Evemenements créés</h2>
-            <div class="block">
-                <?php
-                foreach ($req as $r) 
-                {
-                    ?>
-                    <div> <a href="../PagesPrincipales/PageEvenement.php?id=<?php echo$r['id']?> "><img id="image" src="<?php echo $r['im']?>" alt=""> <p class="nom"><?php echo $r['nom']?></p></a><a class ="txtsuppr" href="../PagesTraitement/PageTraitementSupprimerEvenement.php?event=<?php echo $r['id']?>"><button type="button" class="boutonsupprevenement">Supprimer l'événement</a></div>
-                    <?php
-                }       
-                ?> 
             </div>
-            <hr/>
-            <h2 class="Evenement"> Evemenements auxquels vous participez</h2>
-            <div class="block">
-                <?php
-                    foreach ($req2 as $r2) 
-                    {
-                ?>
-                        <div> <a href="../PagesPrincipales/PageEvenement.php?id=<?php echo$r2['id']?> "><img id="image" src="<?php echo $r2['im']?>" alt=""> <p class="nom"><?php echo $r2['nom']?></p></a></div>
-                <?php
-                    }       
-                ?>                        
-            </div>
-        </div>
-        <?php
+            <?php
         }
         else
-        {
-            header('Location: ../PagesPrincipales/PageConnexion.php');
-            exit();
+        {?>
+            <div class="Participer">
+                <a href = "../PagesTraitement/TraitementParticiperGroupe?idp=<?php echo $_SESSION['id']?>&idg=<?php echo $contenu['id']?>"><button type="submit" class="btn">Participer à ce groupe</button>
+            </div>
+            <?php
         }
-        ?>
-    </div>
-    </body>
-    <script src = "../Scripts/AfficherEvenements.js">
-
-
-    </script>
-
-</html>
+    ?>
+        </div>
+        </body>
+        <script src = "../Scripts/AfficherRecherche.js">
+    
+    
+        </script>
+    
+    </html>

@@ -193,13 +193,12 @@ nav{
     margin-top: 3%;
     display: flex;
     flex-direction: column;
-
 }
-
 img{
     max-height: 80%;
     max-width:  80%;
 }
+
 .exemple2{
     margin-top: 3%;
     display: flex;
@@ -215,6 +214,7 @@ img{
     display: flex;
     flex-direction: column;
 }
+
 #titre{
     margin-top: 1%;
     margin-left: 5%;
@@ -293,4 +293,52 @@ img{
     -webkit-transition: all .8s; 
     -o-transition: all .8s; 
     transition: all .8s;
+}
+.nomevenement{
+    text-indent:28%;
+    font-weight: bold;
+    margin-top:-4%;
+}
+.minia1{
+    width:50px;
+    height: 50px;
+}
+
+.boutonevenement{
+    cursor: pointer;
+    text-align:center;
+    font-size: large;
+    width:190px;
+    height: 100px;
+    line-height:50px;
+    text-align:center;
+    background:url("../Ressources/bouton_filtre-ConvertImage.png") no-repeat;
+    text-decoration:none;
+    margin-top:10%;
+    margin-left:8%;
+}
+.boutonevenement a{
+    color:white;
+}
+.boutonevenement:hover{
+    background:url("../Ressources/bouton_filtre2-ConvertImage.png") no-repeat;
+}
+.boutongroupe{
+    cursor: pointer;
+    text-align:center;
+    font-size: large;
+    width:190px;
+    height: 100px;
+    line-height:50px;
+    text-align:center;
+    background:url("../Ressources/bouton_filtre-ConvertImage.png") no-repeat;
+    text-decoration:none;
+    margin-left:8%;
+    margin-top:-2%;
+}
+.boutongroupe a{
+    color:white;
+}
+.boutongroupe:hover{
+    background:url("../Ressources/bouton_filtre2-ConvertImage.png") no-repeat;
 }

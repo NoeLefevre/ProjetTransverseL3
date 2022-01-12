@@ -133,7 +133,7 @@ session_start();
                                     'idinteret' => $donnee2['idi'],
                                     ));
             }
-            header('Location: ../PagesPrincipales/PagePrincipale.php');
+            header('Location: ../index.php');
             exit();
     }
     ?>

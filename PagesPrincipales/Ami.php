@@ -21,10 +21,10 @@ session_start();
                 <img id="Hamburger2" src = "../Ressources/Hamburger_icon.png">
                 <p id="Nomdusite"><strong>Nom Du Site</strong></p>
             </div>
-            <form class = "Searchbox " action = "" method = "get">
-                <input id = "searchbar" type = "search" name = "terme" placeholder ="Rechercher">
-                <img id ="loupe" src = "../Ressources/loupe_icone.png">
-            </form>
+            <form class = "Searchbox " action = "../PagesPrincipales/AfficherRecherche.php" method = "GET">
+                    <input id = "searchbar" type = "search" name = "terme" placeholder ="Rechercher">
+                    <img id ="loupe" src = "../Ressources/loupe_icone.png">
+                </form>
             <div class="hautdroit">
                 <img id="notification" src = "../Ressources/notification_icone.png">
                 <img id="notification2" src = "../Ressources/notification_icone.png">
@@ -38,8 +38,8 @@ session_start();
                 <div class="nav">
 
                     <div id="Accueil">
-                        <img id="accueil" src="../Ressources/accueil_icone.png">
-                        <a href ="../PagesPrincipales/PagePrincipale"><p class="liste">Accueil</p></a>
+                    <img id="accueil" src="../Ressources/accueil_icone.png">
+                        <a href ="../index.php"><p class="liste">Accueil</p></a>
                     </div>
                     <div id="Amis">
                         <img id="amis" src="../Ressources/amis_icone.png">
@@ -47,9 +47,14 @@ session_start();
                     </div>
                     <div id="Evenements">
                         <img id="evenements" src="../Ressources/evenements_icone.png">
-                        <a href ="../PagesPrincipales/AfficherEvenements"><p class="liste">Vos Evenements</p>
+                        <a href ="../PagesPrincipales/AfficherEvenements.php"><p class="liste">Vos Evenements</p>
                     </div>
-
+                    <div class="boutonevenement">
+                        <a href="../PagesPrincipales/PageCreationEvenement.php">Créer un evenement</a>
+                    </div>
+                    <div class="boutongroupe">
+                        <a href="../PagesPrincipales/PageCreationGroupe.php">Créer un groupe</a>
+                    </div>
                 </div>
             </nav>
             <div id="profil_dynamique">
@@ -74,7 +79,10 @@ session_start();
                             <a title="Accueil" href="#">Message privé</a>
                         </li>
                         <li>
-                            <a title="Accueil" href="#">Modifier</a>
+                            <a title="Accueil" href="../PagesPrincipales/profil.php?id=<?php echo $_SESSION['id']?>">Modifier</a>
+                        </li>
+                        <li>
+                            <a title="Accueil" href="Groupe.php">Groupes</a>
                         </li>
                         <li>
                             <a title="Accueil" href="../PagesTraitement/TraitementDeconnexion.php#">Se Deconnecter</a>
@@ -91,7 +99,7 @@ session_start();
                      {
                         $bdd = new PDO('mysql:host=35.240.56.92;dbname=projetevenement; charset=utf8;port=3306', 'root', 'fbq6dwab');
                 
-                        $reponse = $bdd->prepare('SELECT a.IdRelation as id, p.Nom as nom, p.Prenom as prenom FROM notifications as n JOIN ami AS a ON a.IdRelation=n.IdRelation JOIN Personne as p ON a.Personne1=p.IdPersonne WHERE n.IdPersonne=:id1 AND a.Personne2=:id2'); 
+                        $reponse = $bdd->prepare('SELECT a.IdRelation as id, p.Nom as nom, p.Prenom as prenom FROM notifications as n JOIN ami AS a ON a.IdRelation=n.IdRelation JOIN personne as p ON a.Personne1=p.IdPersonne WHERE n.IdPersonne=:id1 AND a.Personne2=:id2'); 
                         $reponse->execute(array(
                             'id1' => $_SESSION['id'],
                             'id2' => $_SESSION['id'],
@@ -138,21 +146,21 @@ session_start();
                </div>
             <div class="tous_les_amis">
                 <?php 
-                        $bdd = new PDO('mysql:host=35.240.56.92;dbname=projetevenement; charset=utf8;port=3306', 'root', 'fbq6dwab');
-            $reponse = $bdd->prepare('SELECT p.Nom as nom, p.Prenom as prenom, p.IdPersonne as idp FROM ami as a JOIN personne AS p ON a.Personne1=p.IdPersonne  WHERE Personne2=:pers AND Accepte=\'oui\' UNION SELECT p.Nom as nom, p.Prenom as prenom, p.IdPersonne as idp  FROM ami as a JOIN personne AS p ON a.Personne2=p.IdPersonne  WHERE Personne1=:pers AND Accepte=\'oui\''); 
+                       $bdd = new PDO('mysql:host=35.240.56.92;dbname=projetevenement; charset=utf8;port=3306', 'root', 'fbq6dwab');
+            $reponse = $bdd->prepare('SELECT p.Nom as nom, p.Prenom as prenom, p.IdPersonne as idp, p.Bio as bio FROM ami as a JOIN personne AS p ON a.Personne1=p.IdPersonne  WHERE Personne2=:pers AND Accepte=\'oui\' UNION SELECT p.Nom as nom, p.Prenom as prenom, p.IdPersonne as idp, p.Bio as bio FROM ami as a JOIN personne AS p ON a.Personne2=p.IdPersonne  WHERE Personne1=:pers AND Accepte=\'oui\''); 
             $reponse->execute(array('pers'=> $_SESSION['id']));
             $compt = 0 ;
             $ListeEvenement = array();
             foreach ($reponse as $r) {
-                $evenements = $bdd->prepare('SELECT NomEvenement as title, DatesDebut as start, DatesFin as end FROM evenement WHERE IdPersonne=?'); 
-                $evenements->execute(array($r['idp']));
+                $evenements = $bdd->prepare('SELECT NomEvenement as title, DatesDebut as start, DatesFin as end FROM evenement JOIN appartenance ON appartenance.IdAppartenance=evenement.IdAppartenance WHERE appartenance.IdPersonne=:idpers UNION ALL SELECT NomEvenement as title, DatesDebut as start, DatesFin as end FROM evenement JOIN appartenance ON appartenance.IdAppartenance=evenement.IdAppartenance JOIN groupe ON groupe.IdGroupe=appartenance.IdGroupe WHERE groupe.Leader=:idpers UNION ALL SELECT NomEvenement as title, DatesDebut as start, DatesFin as end FROM evenement JOIN appartientevenement ON appartientevenement.IdEvenement=evenement.IdEvenement WHERE appartientevenement.IdPersonne=:idpers'); 
+                $evenements->execute(array('idpers' => $r['idp']));
                 $data = $evenements->fetchALL(PDO::FETCH_ASSOC);
                 $ListeEvenement[$compt] = $data;
                 ?>
                     <div class="contenu1">
                     <div id="photo">
                         <?php
-                        $rep = $bdd->prepare('SELECT LienImage as lien  FROM imageprofil JOIN personne ON personne.IdPersonne=imageprofil.IdPersonne WHERE imageprofil.IdPersonne=?'); 
+                        $rep = $bdd->prepare('SELECT LienImage as lien FROM imageprofil JOIN personne ON personne.IdPersonne=imageprofil.IdPersonne WHERE imageprofil.IdPersonne=?'); 
                         $rep->execute(array($r['idp']));
                         $contenu = $rep->fetch();
             ?>
@@ -161,14 +169,19 @@ session_start();
                     <p class="Text2"><?php echo $r['nom'],' ', $r['prenom'], ' ' ?></p>
                     <div id="description_ami">
                         <div id="phrase_ami">
-                        <p>C'est où qu'elle est ma bat-mobile ?</p>
+                        <p><?php echo $r['bio']?></p>
                         </div>
-
+                        <?php
+                        $centreinteret = $bdd->prepare('SELECT centreinteret.Nom as nominteret from personne JOIN possede on possede.IdPersonne=personne.IdPersonne JOIN centreinteret ON centreinteret.IdInteret=possede.IdInteret WHERE personne.IdPersonne=:idp');
+                        $centreinteret->execute(array('idp' => $r['idp']));
+                        ?>
                         <ul id="caracteristiques_ami">
-                            <li id="carac"> Cinema </li>
-                            <li id="carac"> Spectacles </li>
-                            <li id="carac"> Sports </li>
-                            <li id="carac"> Soirées </li>
+                            <?php
+                        foreach ($centreinteret as $c) {?>
+                            <li id="carac"> <?php echo $c['nominteret'] ?></li>
+                            <?php
+                            }
+                            ?>
                         </ul>
                   </div>
                   <div id="calendrier_ami">
@@ -193,7 +206,7 @@ session_start();
                     <div class="contenu2">
                     <div id="photo2">
                     <?php
-                        $rep = $bdd->prepare('SELECT LienImage as lien  FROM imageprofil JOIN Personne ON Personne.IdPersonne=imageprofil.IdPersonne WHERE imageprofil.IdPersonne=?'); 
+                        $rep = $bdd->prepare('SELECT LienImage as lien FROM imageprofil JOIN personne ON personne.IdPersonne=imageprofil.IdPersonne WHERE imageprofil.IdPersonne=?'); 
                         $rep->execute(array($r['idp']));
                         $contenu = $rep->fetch();
                     ?>
@@ -240,4 +253,3 @@ session_start();
     
 
 </html>
-

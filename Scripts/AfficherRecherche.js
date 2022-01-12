@@ -7,51 +7,12 @@ let profil_menu = document.querySelector("#profil_dynamique");
 let bouton_notif = document.querySelector('#notification');
 let bouton_notif2 = document.querySelector('#notification2');
 let notif =document.querySelector("#notification_dynamique");
+let amis = document.querySelector(".tous_les_amis");
+let boutonfiltre = document.querySelector('.bouton_filtre');
+let boutonfiltre2 = document.querySelector('.bouton_filtre2');
+let filtre = document.querySelector('.filtre');
 const contenu1 = document.querySelectorAll(".contenu1");
 const contenu2 = document.querySelectorAll(".contenu2");
-
-function openForm() {
-    document.getElementById("popupForm").style.display="block";
-}
-  
-function closeForm() {
-    document.getElementById("popupForm").style.display="none";
-}
-
-let ListeEvenement = document.getElementById("hidden").textContent;
-ListeEvenement = JSON.parse(ListeEvenement);
-document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'timeGridWeek',
-          locale:'fr',
-          eventColor:"blue",
-          allDaySlot : false,
-          editable : true,
-          firstDay : "1",
-          dayHeaderFormat:{
-          	weekday: 'short',
-          	omitDots: true
-          },
-          headerToolbar: {
-          	left:'',
-          	center:'',
-          	right:''
-          },
-
-          buttonText:{
-          	today: 'Aujourd\'hui',
-          	month: 'mois',
-          	week : 'semaine',
-          	list:'liste'
-          },
-
-          events: ListeEvenement,
-          nowIndicator:true
-        });
-        calendar.render();
-        event = events;
-      });
 
 
 bouton.addEventListener('click',affiche_menu);
@@ -60,7 +21,44 @@ profil.addEventListener('click',afficher_profil);
 profil2.addEventListener('click',rentrer_profil);
 bouton_notif.addEventListener('click',afficher_notif);
 bouton_notif2.addEventListener('click',rentrer_notif);
+boutonfiltre.addEventListener('click',afficher_filtre);
+boutonfiltre2.addEventListener('click',rentrer_filtre);
 window.onresize = resize;
+
+
+function filtredynamique()
+{
+    str =window.location.href;
+    let newstr="";
+    let i=0;
+    while (str.charAt(i)!="&" && i<str.length)
+    {
+        newstr = newstr + str.charAt(i);
+        i++;
+    }
+    console.log(newstr);
+    if (document.getElementById("Sport").checked == true)
+    {
+        newstr = newstr+"&Sport=True";
+    }
+    if (document.getElementById("Musique").checked == true)
+    {
+        newstr = newstr+"&Musique=True";
+    }
+    if (document.getElementById("TV").checked == true)
+    {
+        newstr = newstr+"&TV=True";
+    }
+    if (document.getElementById("Soiree").checked == true)
+    {
+        newstr = newstr+"&Soiree=True";
+    }
+    if (document.getElementById("Conference").checked == true)
+    {
+        newstr = newstr+"&Conference=True";
+    }
+    document.location.href=newstr;
+}
 
 function resize()
 {
@@ -122,4 +120,38 @@ function rentre_menu()
     bouton2.style.display = "none";
 
 }
+function afficher_filtre()
+{
+    filtre.style.display = "block";
+    boutonfiltre.style.display = "none";
+    boutonfiltre2.style.display = "block";
+}
 
+function rentrer_filtre()
+{
+    filtre.style.display = "none";
+    boutonfiltre.style.display = "block";
+    boutonfiltre2.style.display = "none";
+}
+function afficher_simple()
+{
+	amis.style.flexDirection = "row";
+    for (var i = 0 ; i < contenu1.length ; i++){
+    	contenu1[i].style.display ="none";
+    }
+	for (var i = 0 ; i < contenu2.length ; i++){
+	    	contenu2[i].style.display ="inline-flex";
+	    }
+	return(1)
+}
+
+function afficher_complet()
+{
+	amis.style.flexDirection = "column";
+	 for (var i = 0 ; i < contenu1.length ; i++){
+    	contenu1[i].style.display ="inline-flex";
+    }
+	for (var i = 0 ; i < contenu2.length ; i++){
+	    	contenu2[i].style.display ="none";
+	    }
+}

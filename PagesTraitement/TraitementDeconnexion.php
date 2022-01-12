@@ -21,7 +21,7 @@ session_start();
             }
             $_SESSION = array();
             session_destroy();
-            header('Location: ../PagesPrincipales/PagePrincipale.php');
+            header('Location: ../index.php');
             exit();
             ?>
        

@@ -1,14 +1,52 @@
 .block{
     Display : flex;
+    flex-direction: column;
     flex-wrap:wrap;
     justify-content: center;
     margin :13px;
+    margin-bottom: 4%;
+}
+
+.rectangle{
+    display: flex;
+    margin-right: 1%;
+    margin-top: 1%;
+    max-width: 100%;
+    max-height: 20em;
+    box-shadow: 10px 5px 5px black;
     
 }
+
 img{
-margin-right : 40px; 
-height : 200px;
-width: 300px;
+    max-height: 100%;
+    max-width:  100%;
+}
+#Avatar {
+    max-width: 50px; 
+    max-height: 50px;
+    border-radius: 100%;
+    border: 2px solid #151728;
+  }
+.float{
+    float:left;
+}
+.infoprofil{
+    display:flex;
+    flex-direction: row;
+}
+.txt{
+    line-height:50px;
+    text-indent:10px;
+}
+.info{
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-left:3%;
+}
+.appelation{
+    font-weight: bold;
+    font-size:x-large;
 }
 body{
     width: 100%;
@@ -229,11 +267,103 @@ nav{
     -o-transition: all .8s; 
     transition: all .8s;
 }
+.filtre_contenu{
+    display : flex;
+    flex-direction: row;
+    margin-top:2%;
+    border-bottom: 0.5px solid gray;
+    justify-content:space-evenly;
+}
 .filtre{
-    
-    margin-left : 40%;
+    display:none;
 }
 .tout{
     display : flex;
     flex-direction: column;
+    margin-left:20%;
+}
+.Titre2{
+    margin-top:5%
+}
+.bouton_filtre{
+    cursor: pointer;
+    text-align:center;
+    font-size: large;
+    display:block;
+    width:190px;
+    line-height:50px;
+    text-align:center;
+    background:url("../Ressources/bouton_filtre-ConvertImage.png") no-repeat;
+    color:white;
+    text-decoration:none;
+}
+.bouton_filtre:hover {
+    background:url("../Ressources/bouton_filtre2-ConvertImage.png") no-repeat;
+    }
+.bouton_filtre2{
+    cursor: pointer;
+    text-align:center;
+    font-size: large;
+    display:none;
+    width:190px;
+    line-height:50px;
+    text-align:center;
+    vertical-align:middle;
+    background:url("../Ressources/bouton_filtre-ConvertImage.png") no-repeat;
+    color:white;
+    text-decoration:none;
+}
+.bouton_filtre2:hover {
+    background:url("../Ressources/bouton_filtre2-ConvertImage.png") no-repeat;
+    }
+#imageprof{
+    border-radius: 100%;
+    border: 2px solid #151728;
+}
+hr{
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid rgb(2, 2, 2);
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+}
+.boutonevenement{
+    cursor: pointer;
+    text-align:center;
+    font-size: large;
+    width:190px;
+    height: 100px;
+    line-height:50px;
+    text-align:center;
+    background:url("../Ressources/bouton_filtre-ConvertImage.png") no-repeat;
+    text-decoration:none;
+    margin-top:10%;
+    margin-left:8%;
+}
+.boutonevenement a{
+    color:white;
+}
+.boutonevenement:hover{
+    background:url("../Ressources/bouton_filtre2-ConvertImage.png") no-repeat;
+}
+.boutongroupe{
+    cursor: pointer;
+    text-align:center;
+    font-size: large;
+    width:190px;
+    height: 100px;
+    line-height:50px;
+    text-align:center;
+    background:url("../Ressources/bouton_filtre-ConvertImage.png") no-repeat;
+    text-decoration:none;
+    margin-left:8%;
+    margin-top:-2%;
+}
+.boutongroupe a{
+    color:white;
+}
+.boutongroupe:hover{
+    background:url("../Ressources/bouton_filtre2-ConvertImage.png") no-repeat;
 }

@@ -110,7 +110,7 @@ nav{
     height:100%;
     min-height:100%;
     min-width: 110px; 
-    width: 12%;
+    width: 17%;
     display: none;
     border-right: 3px solid black;
     margin-left:0px;
@@ -224,39 +224,416 @@ nav{
     display:flex;
     justify-content: space-evenly;
     align-items: center;
-    margin: 2% 2% 2% 2%;
-    width: 96%;
+    margin: 1.5% 1.5% 1.5% 1.5%;
     height: 80vh;
     background:white ;
-    border: 2px solid lightskyblue;
-    box-shadow: inset 5px mediumaquamarine;
+    border: 1rem solid rgb(48, 161, 206);
+    box-shadow: inset 5px rgb(102, 176, 205);
     flex-direction: row;
     overflow: hidden;
 }
 .font{
     margin-top: 2%;
-    margin-left: -8%;
+    margin-left: -10%;
     display:flex;
     max-width: 50%;
     flex-direction: column;
-
 }
 
 #minia1{
-    max-width : 40em;
-    max-height : 40em;
+    max-width : 70%;
+    max-height : 70%;
+    margin-top:-28%;
+}
+.notes{
+    margin-top:4%;
+    margin-left:15%;
+}
+.titrenote{
+    margin-left:5%;
+}
+.pas_etoiles{
+    margin-left:3%;
+}
+.boutonnoter{
+    margin-left:60%;
+    margin-top:-5%;
 }
 
-.box_étoiles{
+.box_etoiles{
     flex-direction: row;
 }
 
-.étoile{
+.pas_etoile{
+    margin-left: 500px;
+
+}
+
+.etoile{
     height: 5%;
     width: 5%;
 }
 
 .Description{
+    padding: 3px;
     max-width: 50%;
-    text-align: center;
+    text-align: left;
+    margin-left: -120px;
+}
+#desc_titre{
+    font-size: 17px;
+}
+
+.Titre{
+    text-align:center;
+    margin-top: -40%;
+    text-shadow : 2px 4px 3px rgba(0,0,0,0.3);
+}
+#place{
+    margin-top:30%;
+}
+#infos{
+    
+    padding: 5px;
+    resize : none;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    font-family:"Courier New", Courier, monospace;
+    min-width: 30em;
+    min-height: 4rem;
+    line-height: 1;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 1px 1px 1px #999;
+}
+
+.participer{
+    background: rgb(76, 170, 233) ;
+    border: 2px solid lightskyblue;
+    box-shadow: inset 5px mediumaquamarine; 
+    border-radius: 30px;
+    padding: 6px;
+    margin-left:40%;
+    margin-top:10%;
+}
+/* Note evenement*/
+.interets-popup {
+    display:none;
+    width:50%;
+    margin-left:44%;
+    position:relative;
+  }
+  
+  .form-popup {
+    display: block;
+    border: 2px solid #666;
+    z-index: 9;
+    text-align:center;
+    position:absolute;
+  }
+  
+  .form-container {
+    max-width: 400px;
+    max-height: 80%;
+    padding: 30px;
+    background-color: #fff;
+  }
+  
+  .form-container .btn {
+    margin-top: 8px; 
+    background-color: #d9dde271;
+    color: rgb(0, 0, 0);
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+    opacity: 0.8;
+    border: 2px solid black; 
+  }
+  .form-container .btnmodif {
+    margin-top: 8px; 
+    background-color: #d9dde271;
+    color: rgb(0, 0, 0);
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 10px;
+    opacity: 0.8;
+    border: 2px solid black; 
+  }
+  
+  .form-container .cancel {
+    background-color: #d9dde271;
+    border: 2px solid black; 
+  }
+  
+  .form-container .btn:hover, .open-button:hover, .btnmodif:hover,#addComment:hover {
+    opacity: 1;
+  }
+  .etoile1, .etoile2, .etoile3, .etoile4, .etoile5{
+    height: 10%;
+    width: 10%;
+    cursor: pointer;
+}
+.etoile1j, .etoile2j, .etoile3j, .etoile4j, .etoile5j{
+    height: 10%;
+    width: 10%;
+    cursor: pointer;
+}
+.etoile1:hover .box_etoiles1{
+    display:block;
+}
+.box_etoiles1, .box_etoiles2, .box_etoiles3, .box_etoiles4, .box_etoiles5{
+    flex-direction: row;
+    display:none;
+}
+.box_etoile{
+    flex-direction: row;
+}
+.erreur{
+    color:red;
+}
+.btnnoter{
+    background-color: #33caca;
+    box-shadow: 3px 5px 8px 2px rgba(51, 202, 127, .2);
+    border: 3px solid transparent;
+    font-size: 1rem;
+    color: white;
+    padding: 0.2rem;
+    cursor: pointer;
+    transition: all 250ms ease-in-out;
+}
+.btnnoter2{
+    background-color: #33caca;
+    box-shadow: 3px 5px 8px 2px rgba(51, 202, 127, .2);
+    border: 3px solid transparent;
+    font-size: 1rem;
+    color: white;
+    padding: 0.2rem;
+    cursor: pointer;
+    transition: all 250ms ease-in-out;
+    display:none;
+}
+.commentaire{
+    margin-left:2% ;
+}
+.txtcommentaire{
+    display:none;
+}
+.btncom{
+    background-color: #33caca;
+    box-shadow: 3px 5px 8px 2px rgba(51, 202, 127, .2);
+    border: 3px solid transparent;
+    font-size: 1rem;
+    color: white;
+    padding: 0.2rem;
+    cursor: pointer;
+    transition: all 250ms ease-in-out;
+}
+.btncom2{
+    display:none;
+    background-color: #33caca;
+    box-shadow: 3px 5px 8px 2px rgba(51, 202, 127, .2);
+    border: 3px solid transparent;
+    font-size: 1rem;
+    color: white;
+    padding: 0.2rem;
+    cursor: pointer;
+    transition: all 250ms ease-in-out;
+}
+#information{
+    width:1000px;
+    height: 100px;
+}
+.com{
+    display:block;
+    border: 2px solid black; 
+    height: 150px;
+    margin-bottom: 1%;
+}
+.historiquecommentaire{
+    margin-top:1%;
+}
+.commentBox{
+    padding: 1%;
+    width: 94%;
+    border: 1px solid rgb(0, 0, 0);
+    background-color: #f0f0f0;
+    margin-bottom: 20px;
+    margin-left: 30px;
+}
+
+.leftPanelImg{
+    width: 10%;
+    float: left;
+}
+
+.leftPanelImg img{
+    margin-left: 15px;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 100%;
+}
+
+.rightPanel{
+    width: 85%;
+    float: left;
+}
+.clear{
+    clear:both;
+}
+
+.form{
+    display:none;
+    padding: 10px;
+    border : 1px solid rgb(0, 0, 0);
+    margin-bottom: 10px;
+    margin-top:10px;
+    width:97%;
+
+
+}
+
+#addComment{
+    width:100%;
+}
+
+.form [type="submit"] {
+    background-color: #33caca;
+    box-shadow: 3px 5px 8px 2px rgba(51, 202, 127, .2);
+    border: 3px solid transparent;
+    font-size: 1rem;
+    color: white;
+    padding: 0.2rem;
+    cursor: pointer;
+    transition: all 250ms ease-in-out;
+}
+
+#bodyText{
+    resize: none;
+    margin-bottom: 20px;
+}
+
+.form input[type ="text"], .form textarea, .form input[type="date"]{
+    border: 1px solid #000;
+    padding: 2px;
+    width: 300px;
+}
+.btnparticiper{
+    background-color: #33caca;
+    box-shadow: 3px 5px 8px 2px rgba(51, 202, 127, .2);
+    border: 3px solid transparent;
+    font-size: 1rem;
+    color: white;
+    padding: 0.2rem;
+    cursor: pointer;
+    transition: all 250ms ease-in-out;
+    margin-left:40%;
+    margin-top:10%;
+}
+.ensemble-bouton{
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.ensemble{
+    display:flex;
+}
+.btnmodif{
+    background-color: #33caca;
+    box-shadow: 3px 5px 8px 2px rgba(51, 202, 127, .2);
+    border: 3px solid transparent;
+    font-size: 1rem;
+    color: white;
+    padding: 0.2rem;
+    cursor: pointer;
+    transition: all 250ms ease-in-out;
+    width : 200px;
+}
+.btnvalide{
+    background-color: #33caca;
+    box-shadow: 3px 5px 8px 2px rgba(51, 202, 127, .2);
+    border: 3px solid transparent;
+    font-size: 1rem;
+    color: white;
+    padding: 0.2rem;
+    cursor: pointer;
+    transition: all 250ms ease-in-out;
+    width : 200px;
+    margin-bottom: 10px;
+}
+hr{
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid rgb(46, 45, 45);
+    margin: 0 auto;
+    width: 100%;
+    padding: 0;
+}
+#photoprofil {
+    max-width: 50px; 
+    max-height: 50px;
+    border-radius: 100%;
+    border: 2px solid #151728;
+  }
+
+.auteur{
+    display:flex;
+    font-weight: bold;
+}
+.nomauteurcom{
+    margin-left:10%;
+}
+.prenomauteurcom{
+    margin-left:10%;
+}
+.other{
+    display:flex;
+}
+.comcontenue{
+    margin-left:3.5%;
+    margin-top:-1%;
+    margin-bottom: 1%;
+    width:500px;
+    white-space: normal;
+}
+.boutonevenement{
+    cursor: pointer;
+    text-align:center;
+    font-size: large;
+    width:190px;
+    height: 100px;
+    line-height:50px;
+    text-align:center;
+    background:url("../Ressources/bouton_filtre-ConvertImage.png") no-repeat;
+    text-decoration:none;
+    margin-top:10%;
+}
+.boutonevenement a{
+    color:white;
+}
+.boutonevenement:hover{
+    background:url("../Ressources/bouton_filtre2-ConvertImage.png") no-repeat;
+}
+.boutongroupe{
+    cursor: pointer;
+    text-align:center;
+    font-size: large;
+    width:190px;
+    height: 100px;
+    line-height:50px;
+    text-align:center;
+    background:url("../Ressources/bouton_filtre-ConvertImage.png") no-repeat;
+    text-decoration:none;
+    margin-top:-2%;
+}
+.boutongroupe a{
+    color:white;
+}
+.boutongroupe:hover{
+    background:url("../Ressources/bouton_filtre2-ConvertImage.png") no-repeat;
 }

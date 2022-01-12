@@ -367,3 +367,41 @@ nav{
 #hidden2{
     display : none;
 }
+.boutonevenement{
+    cursor: pointer;
+    text-align:center;
+    font-size: large;
+    width:190px;
+    height: 100px;
+    line-height:50px;
+    text-align:center;
+    background:url("../Ressources/bouton_filtre-ConvertImage.png") no-repeat;
+    text-decoration:none;
+    margin-top:10%;
+    margin-left:8%;
+}
+.boutonevenement a{
+    color:white;
+}
+.boutonevenement:hover{
+    background:url("../Ressources/bouton_filtre2-ConvertImage.png") no-repeat;
+}
+.boutongroupe{
+    cursor: pointer;
+    text-align:center;
+    font-size: large;
+    width:190px;
+    height: 100px;
+    line-height:50px;
+    text-align:center;
+    background:url("../Ressources/bouton_filtre-ConvertImage.png") no-repeat;
+    text-decoration:none;
+    margin-left:8%;
+    margin-top:-2%;
+}
+.boutongroupe a{
+    color:white;
+}
+.boutongroupe:hover{
+    background:url("../Ressources/bouton_filtre2-ConvertImage.png") no-repeat;
+}

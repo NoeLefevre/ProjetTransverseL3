@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Récupérer la valeur d'un select avec jQuery</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function(){
+      $("select.langage").change(function(){
+        var langage = $(this).children("option:selected").val();
+        console.log(langage);
+      });
+    });
+    </script>
+  </head> 
+  <body>
+    <form>
+      <label>Sélectionner un langage:</label>
+      <select class="langage">
+        <option value="java">Java</option>
+        <option value="php">PHP</option>
+        <option value="python">Python</option>
+      </select>
+    </form>
+  </body>
+</html

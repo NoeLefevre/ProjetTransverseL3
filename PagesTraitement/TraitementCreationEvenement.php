@@ -10,6 +10,7 @@ session_start();
     </head>
     <body>
     <?php
+    include 'php_image_magician.php';
     try
     {
         $bdd = new PDO('mysql:host=35.240.56.92;dbname=projetevenement; charset=utf8;port=3306', 'root', 'fbq6dwab');
@@ -20,18 +21,48 @@ session_start();
             die('Erreur : '.$e->getMessage());
     }
 
-        $req = $bdd->prepare('INSERT INTO evenement(Information,NomEvenement,IdPersonne,DatesDebut,DatesFin) 
-        VALUES(:information,:nomevenement,:idpersonne,:db,:df)');
+    if ($_POST['choix']=='Personne')
+    {
+        $req = $bdd->prepare('INSERT INTO appartenance(IdPersonne) 
+        VALUES(:idpersonne)');
+            $req->execute([
+            'idpersonne' => $_SESSION['id'],
+            ]);
+        $reponse = $bdd->query('SELECT MAX(IdAppartenance) as ida FROM appartenance');
+        $donnee =$reponse->fetch();
+        $req = $bdd->prepare('INSERT INTO evenement(Information,NomEvenement,IdAppartenance,DatesDebut,DatesFin) 
+        VALUES(:information,:nomevenement,:idappartenance,:db,:df)');
             $req->execute([
             'information' => $_POST['information'],
             'nomevenement' => $_POST['nom'],
-            'idpersonne' => $_SESSION['id'],
+            'idappartenance' => $donnee['ida'],
             'db' => $_POST['datedebut'],
             'df' => $_POST['datefin']
             ]);
-
-
-            if (isset($_POST['Sport']))
+    }
+    else
+    {
+        $reponse = $bdd->prepare('SELECT IdGroupe as idg FROM groupe WHERE Nom=?');
+        $reponse->execute(array($_POST['choix2']));
+        $donnee =$reponse->fetch();
+        $req = $bdd->prepare('INSERT INTO appartenance(IdGroupe) 
+        VALUES(:idgroupe)');
+            $req->execute([
+            'idgroupe' => $donnee['idg'],
+            ]);
+            $reponse = $bdd->query('SELECT MAX(IdAppartenance) as ida FROM appartenance');
+        $donnee =$reponse->fetch();
+        $req = $bdd->prepare('INSERT INTO evenement(Information,NomEvenement,IdAppartenance,DatesDebut,DatesFin) 
+        VALUES(:information,:nomevenement,:idappartenance,:db,:df)');
+            $req->execute([
+            'information' => $_POST['information'],
+            'nomevenement' => $_POST['nom'],
+            'idappartenance' => $donnee['ida'],
+            'db' => $_POST['datedebut'],
+            'df' => $_POST['datefin']
+            ]);
+    }
+    if (isset($_POST['Sport']))
             {
                 $reponse = $bdd->query('SELECT MAX(IdEvenement) as ide FROM evenement');
                 $donnee =$reponse->fetch();
@@ -102,7 +133,8 @@ if (!$ret) {
 } else {
     // Le fichier a bien été reçu
     $img_taille = $_FILES['fic']['size'];
-
+    $newwidth = 1024;
+    $newheight = 576;
     $img_type = $_FILES['fic']['type'];
     $img_nom  = $_FILES['fic']['name'];
     $img_blob = file_get_contents ($_FILES['fic']['tmp_name']);
@@ -111,6 +143,9 @@ if (!$ret) {
     $chemin = $donnee['id']+1;
     $cheminImage = "../image/photo$chemin.png";
     file_put_contents("../image/photo$chemin.png", $img_blob);
+    $magicianObj = new imageLib("../image/photo$chemin.png");
+    $magicianObj -> resizeImage($newwidth, $newheight, 'crop');
+    $magicianObj -> saveImage("../image/photo$chemin.png");
     $req = $bdd->prepare('INSERT INTO images(img_nom,img_taille,img_type,IdEvenement,LienImage) 
     VALUES(:img_nom,:img_taille,:img_type,:IdEvenement,:LienImage)');
         $req->execute([
@@ -122,7 +157,10 @@ if (!$ret) {
          ]);
     
     }
+    header('Location: ../PagesPrincipales/AfficherEvenements.php');
+    exit();
 
+            
 ?>
 
 </body>

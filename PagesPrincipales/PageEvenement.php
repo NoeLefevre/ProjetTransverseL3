@@ -33,7 +33,7 @@ session_start();
 
                     <div id="Accueil">
                         <img id="accueil" src="../Ressources/accueil_icone.png">
-                        <a href ="../PagesPrincipales/PagePrincipale"><p class="liste">Accueil</p></a>
+                        <a href ="../index.php"><p class="liste">Accueil</p></a>
                     </div>
                     <div id="Amis">
                         <img id="amis" src="../Ressources/amis_icone.png">
@@ -41,9 +41,14 @@ session_start();
                     </div>
                     <div id="Evenements">
                         <img id="evenements" src="../Ressources/evenements_icone.png">
-                        <p class="liste">Vos Evenements</p>
+                        <a href ="../PagesPrincipales/AfficherEvenements.php"><p class="liste">Vos Evenements</p>
                     </div>
-
+                    <div class="boutonevenement">
+                        <a href="../PagesPrincipales/PageCreationEvenement.php">Créer un evenement</a>
+                    </div>
+                    <div class="boutongroupe">
+                        <a href="../PagesPrincipales/PageCreationGroupe.php">Créer un groupe</a>
+                    </div>
                 </div>
             </nav>
             <div id="profil_dynamique">
@@ -68,7 +73,10 @@ session_start();
                             <a title="Accueil" href="#">Message privé</a>
                         </li>
                         <li>
-                            <a title="Accueil" href="#">Modifier</a>
+                            <a title="Accueil" href="../PagesPrincipales/profil.php?id=<?php echo $_SESSION['id']?>">Modifier</a>
+                        </li>
+                        <li>
+                            <a title="Accueil" href="Groupe.php">Groupes</a>
                         </li>
                         <li>
                             <a title="Accueil" href="../PagesTraitement/TraitementDeconnexion.php#">Se Deconnecter</a>
@@ -114,34 +122,293 @@ session_start();
                 ?>
                 <ul class="menu2">
             </div>
+            <?php 
+            if (isset($_SESSION['id']))
+            {
+                $req = $bdd->prepare('INSERT INTO HistoriqueEvenement(IdEvenement,IdPersonne) VALUES(:ide,:idp)');
+                $req->execute(array('ide' => $_GET['id'],
+                                    'idp' => $_SESSION['id'],
+            ));
+            }
+            ?>
+        <div class="ensembles">
             <div class="contenu">
                 <?php
-                    $bdd = new PDO('mysql:host=localhost;dbname=projetevenement; charset=utf8;port=3307', 'root', '');
-                    $req = $bdd->prepare('SELECT images.LienImage as im, evenement.information as info, evenement.NomEvenement as nom, evenement.IdEvenement as id  FROM images JOIN evenement ON images.IdEvenement=evenement.IdEvenement WHERE evenement.IdEvenement=:idevenement');
+                    if (isset($_GET['reset'])){
+                        $_COOKIE['note'] = 0;
+                    }
+                    
+                   $bdd = new PDO('mysql:host=35.240.56.92;dbname=projetevenement; charset=utf8;port=3306', 'root', 'fbq6dwab');
+                    $req = $bdd->prepare('SELECT images.LienImage as im, evenement.information as info, evenement.NomEvenement as nom, evenement.IdEvenement as id, appartenance.IdPersonne as idp, evenement.DatesFin as fin, evenement.DatesDebut as debut, evenement.Lieu as lieu FROM images JOIN evenement ON images.IdEvenement=evenement.IdEvenement JOIN appartenance ON appartenance.IdAppartenance=evenement.IdAppartenance WHERE evenement.IdEvenement=:idevenement');
                     $req->execute(array('idevenement' => $_GET['id'],
                                     ));
                     $contenu = $req->fetch();
+                    $req2 = $bdd->prepare('SELECT * FROM appartientevenement WHERE IdPersonne=:idpersonne AND IdEvenement=:idevenement');
+                    $req2->execute(array('idpersonne' => $_SESSION['id'],
+                                         'idevenement' => $_GET['id'],
+                                                        ));
+                    $contenu2 = $req2->fetch();  
                 ?>
                <div class = "font">
                     <img id = "minia1" src = "<?php echo $contenu['im'] ?>" alt="Ceci est un placeholder">
-                    <div class = "notes">
-                        <p>Notes de l'évènement</p>
-                        <div class = "box_étoiles">
-                            <img class = "étoile" src = "../Ressources/note.png" alt = "étoile note">
-                            <img class = "étoile" src = "../Ressources/note.png" alt = "étoile note">
-                            <img class = "étoile" src = "../Ressources/note.png" alt = "étoile note">
+                    <div class="ensemblenote">
+                        <div class = "notes">
+                            <p class="titrenote">Notes de l'évènement</p>
+                            <?php
+                            $reponse = $bdd->prepare('SELECT MoyNote as moynote from evenement WHERE IdEvenement=?');
+                            $reponse->execute(array($_GET['id']));
+                            $donnee =$reponse->fetch();
+                            ?>
+                            <?php
+                            if (empty($donnee['moynote']))
+                            {
+                            ?>
+                            <div class = "pas_etoiles">
+                                Evenement pas encore noté
+                            </div>
+                            <div class = "box_etoiles">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                            </div>
+                            <?php
+                            }
+                            else if ($donnee['moynote']==0)
+                            {
+                                ?>
+                            <div class = "box_etoiles">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                            </div>
+                            <?php
+                            }
+                            else if ($donnee['moynote']==1)
+                            {
+                                ?>
+                            <div class = "box_etoile1">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                            </div>
+                            <?php
+                            }
+                            else if ($donnee['moynote']==2)
+                            {
+                                ?>
+                            <div class = "box_etoile2">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                            </div>
+                            <?php
+                            }
+                            else if ($donnee['moynote']==3)
+                            {
+                                ?>
+                            <div class = "box_etoile3">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                            </div>
+                            <?php
+                            }
+                            else if ($donnee['moynote']==4)
+                            {
+                                ?>
+                            <div class = "box_etoile4">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note.png" alt = "étoile note">
+                            </div>
+                            <?php
+                            }
+                            else if ($donnee['moynote']==5)
+                            {
+                                ?>
+                            <div class = "box_etoile5">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                                <img class = "etoile" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            </div>
+                            <?php
+                            }
+                            ?>
                         </div>
+                        <div class="boutonnoter">
+                            <p><button type="submit" class="btnnoter">Noter cet evenement</button></p>
+                            <p><button type="submit" class="btnnoter2">Noter cet evenement</button></p>
+                        </div>
+                        <div class="interets-popup">
+                <div class="form-popup" id="popupForm">
+                <?php
+                $DateActuelle = strtotime(date('Y-m-d H:i:s'));
+                $DateEvenement = strtotime($contenu['fin']);
+                        if ($DateEvenement>$DateActuelle)
+                        {?>
+                        <p>Vous ne pouvez pas encore noter cet evenement</p>
+                        <?php
+                        }
+                        else if ($DateEvenement<$DateActuelle && !isset($contenu2['IdPersonne']) && $contenu['idp']!=$_SESSION['id'])
+                        {?>
+                            <p>Vous ne pouvez pas noter cet evenement car vous n'y avez pas participé</p>
+                            <?php
+                        }
+                        else
+                        {?>
+                <?php if (isset($_COOKIE['note']))
+                {?>
+                  <form action="../PagesTraitement/TraitementNoterEvenement.php?event=<?php echo $_GET['id']?>&note=<?php echo $_COOKIE['note']?>" class="form-container" method = "POST">
+         <?php }?>
+                    <h3>Renseignez votre note</h3>
+                    <?php if (isset($_GET['false']))
+                            {?>
+                                <p class="erreur">Vous n'avez pas rentré de note</p>
+                                <?php
+                                echo $_COOKIE['note'];
+                            }
+                    
+                    ?>
+                    <div class = "notation">
+                        <div class = "box_etoile">
+                            <img class = "etoile1" src = "../Ressources/note.png" alt = "étoile note">
+                            <img class = "etoile2" src = "../Ressources/note.png" alt = "étoile note">
+                            <img class = "etoile3" src = "../Ressources/note.png" alt = "étoile note">
+                            <img class = "etoile4" src = "../Ressources/note.png" alt = "étoile note">
+                            <img class = "etoile5" src = "../Ressources/note.png" alt = "étoile note">
+                        </div>
+                        <div class = "box_etoiles1">
+                            <img class = "etoile1j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            <img class = "etoile2" src = "../Ressources/note.png" alt = "étoile note">
+                            <img class = "etoile3" src = "../Ressources/note.png" alt = "étoile note">
+                            <img class = "etoile4" src = "../Ressources/note.png" alt = "étoile note">
+                            <img class = "etoile5" src = "../Ressources/note.png" alt = "étoile note">
+                        </div>
+                        <div class = "box_etoiles2">
+                            <img class = "etoile1j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            <img class = "etoile2j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            <img class = "etoile3" src = "../Ressources/note.png" alt = "étoile note">
+                            <img class = "etoile4" src = "../Ressources/note.png" alt = "étoile note">
+                            <img class = "etoile5" src = "../Ressources/note.png" alt = "étoile note">
+                        </div>
+                        <div class = "box_etoiles3">
+                            <img class = "etoile1j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            <img class = "etoile2j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            <img class = "etoile3j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            <img class = "etoile4" src = "../Ressources/note.png" alt = "étoile note">
+                            <img class = "etoile5" src = "../Ressources/note.png" alt = "étoile note">
+                        </div>
+                        <div class = "box_etoiles4">
+                            <img class = "etoile1j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            <img class = "etoile2j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            <img class = "etoile3j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            <img class = "etoile4j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            <img class = "etoile5" src = "../Ressources/note.png" alt = "étoile note">
+                        </div>
+                        <div class = "box_etoiles5">
+                            <img class = "etoile1j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            <img class = "etoile2j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            <img class = "etoile3j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            <img class = "etoile4j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                            <img class = "etoile5j" src = "../Ressources/note_jaune2.png" alt = "étoile note">
+                        </div>
+                    </div>
+                    <button type="button" class="btnmodif">Modifier</button>
+                    <button type="submit" class="btnvalide" >Valider</button>
+                  </form>
+                  <?php }
+                ?>
+                </div>
+                </div>
                     </div>
                 </div>
                 <div class = "Description">
                     <h1 class = "Titre"><?php echo $contenu['nom'] ?></h1>
-                    <p>Lieu de l'évènement</p>
-                    <p><?php echo $contenu['info'] ?></p>
+                        <p id = "place">&#9906 Lieu de l'évènement : <?php echo $contenu['lieu'] ?></p>
+                        <p id = "desc_titre">Description de l'évènement : </p>
+                        <textarea readonly="readonly", id = "infos"><?php echo $contenu['info'] ?></textarea>
+                        <p>Date de début : <?php echo $contenu['debut'] ?> </p>
+                        <p>Date de fin : <?php echo $contenu['fin'] ?></p>
+                        <?php
+                            ?>
+                                <?php
+                        if($DateEvenement<$DateActuelle)
+                            {?> 
+                                    <button class="participer" >Cet évènement est finit</button>
+                            <?php
+                            }
+                            else if ($contenu['idp']==$_SESSION['id'] || isset($contenu2['IdPersonne']))
+                            {?>
+                                    <button class="participer" >Vous participez deja à cet evenement</button>
+                            <?php
+                            }
+                            else
+                            {?>     
+                                    <a href = "../PagesTraitement/TraitementParticiperEvenement?idp=<?php echo $_SESSION['id']?>&ide=<?php echo $_GET['id']?>"><button type="submit" class="btnparticiper">Participer à cet evenement</button></a>
+                            <?php
+                            }
+                            ?>                
+            
+              </div>
+        </div>
+        <div class="commentaire">
+            <h2 class="titrecommentaire">Espace Commentaire</h2>
+            <button type="button" class="btncom">Commenter cet evenement</button>
+            <button type="button" class="btncom2">Commenter cet evenement</button>
+            <div class = 'form'>
+                <form action = "../PagesTraitement/TraitementCommentaireEvenement.php?event=<?php echo $_GET['id']?> " method="post">
+                    <h1>Commentaires </h1>
+                    <p>Titre</p>
+                    <input type ="text" id = "name" name="titre">
+                    <p>Commetaire</p>
+                    <textarea cols="60" rows="5" id = "bodyText" name="information"></textarea>
+                    <input type="submit" id = "addComment" value = "Ajouter un commentaire">
+                </form>
+            </div>
+            <div class="historiquecommentaire">
+                <?php
+                $historiquecom = $bdd->prepare('SELECT personne.Nom as nom, personne.Prenom as prenom, CommentaireEvenement.Commentaire as com, CommentaireEvenement.Dates as dates, imageprofil.LienImage as lienim FROM CommentaireEvenement JOIN personne ON personne.IdPersonne=CommentaireEvenement.IdPersonne JOIN imageprofil ON imageprofil.IdPersonne=personne.IdPersonne WHERE CommentaireEvenement.IdEvenement=:ide');
+                $historiquecom->execute(array('ide' => $_GET['id']));
+                ?>
+                <div class="ensemblecommentaire">
+                <?php
+                foreach ($historiquecom as $hc) {
+                    ?>
+                    <div id ="commentaireblock">
+                        <div class="other">
+                            <div class="photo"><img id="photoprofil" src="<?php echo $hc['lienim'];?>"></div>
+                            <div class="auteur">
+                                    <div class="nomauteurcom"><?php echo $hc['nom'];?></div>
+                                    <div class="prenomauteurcom"><?php echo $hc['prenom'];?></div>
+                            </div>
+                        </div>
+                        <div class="comcontenue"><p class="test"><?php echo $hc['com'];?></p></div>
+                    </div>
+                    <div class="datecom"><?php echo $hc['dates'];?></div>
+                    <hr/>
+                <?php
+                    }
+                    ?>
                 </div>
             </div>
-        
+        </div>
     </body>
-    <script src = "../Scripts/AfficherEvenements.js">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src = "../Scripts/PageEvenement.js">
 
 
     </script>

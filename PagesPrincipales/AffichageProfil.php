@@ -58,6 +58,9 @@ session_start();
                     <a title="Accueil" href="#">Message privé</a>
                 </li>
                 <li>
+                            <a title="Accueil" href="Groupe.php">Groupes</a>
+                        </li>
+                <li>
                     <a title="Accueil" href="#">Modifier</a>
                 </li>
             </ul>

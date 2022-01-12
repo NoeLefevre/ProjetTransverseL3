@@ -18,10 +18,10 @@ session_start();
                 <img id="Hamburger2" src = "../Ressources/Hamburger_icon.png">
                 <p id="Nomdusite"><strong>Nom Du Site</strong></p>
             </div>
-            <form class = "Searchbox " action = "" method = "get">
-                <input id = "searchbar" type = "search" name = "terme" placeholder ="Rechercher">
-                <img id ="loupe" src = "../Ressources/loupe_icone.png">
-            </form>
+            <form class = "Searchbox " action = "../PagesPrincipales/AfficherRecherche.php" method = "GET">
+                    <input id = "searchbar" type = "search" name = "terme" placeholder ="Rechercher">
+                    <img id ="loupe" src = "../Ressources/loupe_icone.png">
+                </form>
             <div class="hautdroit">
                 <img id="notification" src = "../Ressources/notification_icone.png">
                 <img id="notification2" src = "../Ressources/notification_icone.png">
@@ -35,7 +35,7 @@ session_start();
 
                     <div id="Accueil">
                         <img id="accueil" src="../Ressources/accueil_icone.png">
-                        <a href ="../PagesPrincipales/PagePrincipale"><p class="liste">Accueil</p></a>
+                        <a href ="../index.php"><p class="liste">Accueil</p></a>
                     </div>
                     <div id="Amis">
                         <img id="amis" src="../Ressources/amis_icone.png">
@@ -43,7 +43,13 @@ session_start();
                     </div>
                     <div id="Evenements">
                         <img id="evenements" src="../Ressources/evenements_icone.png">
-                        <p class="liste">Vos Evenements</p>
+                        <a href ="../PagesPrincipales/AfficherEvenements.php"><p class="liste">Vos Evenements</p>
+                    </div>
+                    <div class="boutonevenement">
+                        <a href="../PagesPrincipales/PageCreationEvenement.php">Créer un evenement</a>
+                    </div>
+                    <div class="boutongroupe">
+                        <a href="../PagesPrincipales/PageCreationGroupe.php">Créer un groupe</a>
                     </div>
 
                 </div>
@@ -70,7 +76,10 @@ session_start();
                             <a title="Accueil" href="#">Message privé</a>
                         </li>
                         <li>
-                            <a title="Accueil" href="#">Modifier</a>
+                            <a title="Accueil" href="../PagesPrincipales/profil.php?id=<?php echo $_SESSION['id']?>">Modifier</a>
+                        </li>
+                        <li>
+                            <a title="Accueil" href="../PagesPrincipales/Groupe.php">Groupes</a>
                         </li>
                         <li>
                             <a title="Accueil" href="../PagesTraitement/TraitementDeconnexion.php#">Se Deconnecter</a>
@@ -217,20 +226,26 @@ session_start();
                 <?php if($_SESSION['id']==$_GET['id'])
             {
                 ?>
-                <button type="submit" id = "change">Modifier</button>
+                <button type="submit" id = "change">Modifier</button>   
                 <?php
             }
             ?>
             </div>
-            
-    
-                       
+            <?php
+                $evenements = $bdd->prepare('SELECT NomEvenement as title, DatesDebut as start, DatesFin as end FROM evenement JOIN appartenance ON appartenance.IdAppartenance=evenement.IdAppartenance WHERE appartenance.IdPersonne=:idpers UNION ALL SELECT NomEvenement as title, DatesDebut as start, DatesFin as end FROM evenement JOIN appartenance ON appartenance.IdAppartenance=evenement.IdAppartenance JOIN groupe ON groupe.IdGroupe=appartenance.IdGroupe WHERE groupe.Leader=:idpers UNION ALL SELECT NomEvenement as title, DatesDebut as start, DatesFin as end FROM evenement JOIN appartientevenement ON appartientevenement.IdEvenement=evenement.IdEvenement WHERE appartientevenement.IdPersonne=:idpers'); 
+                $evenements->execute(array('idpers' => $_GET['id'],
+                                    ));
+                $ListeEvenement = $evenements->fetchALL(PDO::FETCH_ASSOC);
+                $ListeEvenement = json_encode($ListeEvenement);
+                ?>      
         </div>
 
         <div id ="EvenementsPerso" >
         
-                
         </div> 
+        <div id="hidden">
+        <?php echo $ListeEvenement ?>
+        </div>
         <div id= "calendar">
             </div>
     </div>
